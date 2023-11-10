@@ -1,4 +1,5 @@
 ﻿using Magic_Villa_VillaApi.Data;
+using Magic_Villa_VillaApi.Logging;
 using Magic_Villa_VillaApi.Models;
 using Magic_Villa_VillaApi.Models.DTO;
 using Microsoft.AspNetCore.JsonPatch;
@@ -10,14 +11,17 @@ namespace Magic_Villa_VillaApi.Controllers
     [ApiController]
     public class VillaAPIController : ControllerBase
     {
-        private readonly ILogger _logger;
-        public VillaAPIController(ILogger<VillaAPIController> logger)
+        private readonly ILogging _logger;
+        public VillaAPIController(ILogging logger)
         {
             _logger = logger;    
         }
+
+
         [HttpGet]
         [ProducesResponseType(200)]
         public ActionResult <VillaDto> GetVillas() {
+            _logger.Log("Get All Villas!","");
             return Ok(VillaStore.villaslist);
         }
 
@@ -29,9 +33,10 @@ namespace Magic_Villa_VillaApi.Controllers
         public ActionResult GetSpaceficVilla(int id)
         {
             if(id == 0) {
+                _logger.Log("Invalid ID!", "error");
                 return BadRequest();            
             }
-             var villa = VillaStore.villaslist.FirstOrDefault(u => u.Id == id);
+            var villa = VillaStore.villaslist.FirstOrDefault(u => u.Id == id);
             if(villa == null) { 
                 return NotFound();
             }
@@ -55,6 +60,7 @@ namespace Magic_Villa_VillaApi.Controllers
             }
             if (villa.Id > 0)
             {
+                _logger.Log("Don't Enter The ID With YourSelf!", "warning");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             villa.Id = VillaStore.villaslist.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
