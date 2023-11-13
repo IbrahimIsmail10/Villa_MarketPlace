@@ -2,8 +2,9 @@
 
 namespace Magic_Villa_VillaApi.Models.DTO
 {
-    public class VillaDto
+    public class VillaUpdatedDto
     {
+        [Required]
         public int Id { get; set; }
         [Required]
         [MaxLength(30)]
@@ -11,8 +12,14 @@ namespace Magic_Villa_VillaApi.Models.DTO
         public string Details { get; set; }
         [Required]
         public double Rate { get; set; }
-        public  int Occupency { get; set; }
+        [Required]
+
+        public int Occupency { get; set; }
+        [Required]
+
         public int sqfit { get; set; }
+        [Required]
+
         public string ImageUrl { get; set; }
         public string Amenity { get; set; }
     }
