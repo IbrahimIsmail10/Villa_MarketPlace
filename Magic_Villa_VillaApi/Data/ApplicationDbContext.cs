@@ -76,6 +76,27 @@ namespace Magic_Villa_VillaApi.Data
                   CreatedDate = DateTime.Now
 
               });
+            modelBuilder.Entity<VillaNumber>().HasData(
+                new VillaNumber
+                {
+                    VillaNo = 101,
+                    SpecialDetails = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
+                    CreatedDate = DateTime.Now
+
+                },
+              new VillaNumber
+              {
+                  VillaNo = 99,
+                  SpecialDetails = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
+                  CreatedDate = DateTime.Now
+
+              },
+              new VillaNumber
+              {
+                  VillaNo = 105,
+                  SpecialDetails = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
+                  CreatedDate = DateTime.Now
+              });
         }
     }
 }
