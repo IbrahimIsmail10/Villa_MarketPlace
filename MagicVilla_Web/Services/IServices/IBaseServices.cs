@@ -1,0 +1,11 @@
+﻿using Magic_Villa_Web.Models;
+using MagicVilla_Web.Models;
+
+namespace MagicVilla_Web.Services.IServices
+{
+    public interface IBaseServices
+    {
+        APIResponse APIResponse { get; set; }
+        Task<T> SendAsync<T>(APIRequest ApiRequest); 
+    }
+}
