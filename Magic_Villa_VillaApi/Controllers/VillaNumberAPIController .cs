@@ -33,7 +33,7 @@ namespace Magic_Villa_VillaApi.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         public async Task<ActionResult <APIResponse>> GetVillasNumber() {
-            IEnumerable <VillaNumber> villalist = await villaNumber.GetAllAsync();
+            IEnumerable <VillaNumber> villalist = await villaNumber.GetAllAsync(includeProperties:"Villa");
             _logger.Log("Get All Villas!","");
             response.Result = _mapper.Map<List<VillaNumberDto>>(villalist);
             response.Status = HttpStatusCode.OK;
