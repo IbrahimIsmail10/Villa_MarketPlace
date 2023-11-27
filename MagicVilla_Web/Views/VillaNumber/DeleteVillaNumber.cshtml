@@ -1,31 +1,36 @@
-﻿@model Magic_Villa_Web.Models.DTO.VillaNumberDto
-<<form asp-action="DeleteVillaNumber">
+﻿@model MagicVilla_Web.Models.VillaNumberModels.VillaNumberDeleteVM
+
+<form asp-action="DeleteVillaNumber">
     <br />
     <div class="container border p-3">
-        <h1 class="text-primary">Delete Villa Number</h1>
+        <h1 class="text-primary">Update Villa</h1>
         <hr />
-
+        <input hidden asp-for="VillaNumber.VillaNo" />
         <div class="row">
-            <div class="col-2">
-                <label asp-for="VillaNo" class="control-label pt-2" style="font-size:20px;"></label>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+           <div class="col-2">
+                <label asp-for="VillaNumber.VillaNo" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="VillaNo" disabled class="form-control" />
+                <input asp-for="VillaNumber.VillaNo" disabled class="form-control" />
             </div>
 
             <div class="col-2">
-                <label asp-for="VillaID" class="control-label pt-2" style="font-size:20px;"></label>
+                <label asp-for="VillaNumber.VillaID" class="control-label pt-2" style="font-size:20px;"></label>
             </div>
             <div class="col-10 pb-3">
-                <input asp-for="VillaID" disabled class="form-control" />
+                <select asp-for="VillaNumber.VillaID" disabled class="form-select" asp-items="@Model.villalist">
+                    <option disabled selected>--Select Villa--</option>
+                </select>
+            </div>
+            <div class="col-2">
+                <label asp-for="VillaNumber.SpecialDetails" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <textarea asp-for="VillaNumber.SpecialDetails" readonly class="form-control" rows="5"></textarea>
             </div>
 
-            <div class="col-2">
-                <label asp-for="SpecialDetails" class="control-label pt-2" style="font-size:20px;"></label>
-            </div>
-            <div class="col-10 pb-3">
-                <textarea asp-for="SpecialDetails" disabled class="form-control" rows="5"></textarea>
-            </div>
             <div class="col-5 offset-2">
                 <a asp-action="IndexVillaNumber" asp-controller="VillaNumber" class="btn-primary btn form-control ">Back to List</a>
             </div>

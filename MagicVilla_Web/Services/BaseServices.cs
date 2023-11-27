@@ -1,6 +1,7 @@
 ﻿using Magic_Villa_Web.Models;
 using MagicVilla_Web.Models;
 using MagicVilla_Web.Services.IServices;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
 using System.Linq.Expressions;
 using System.Net.Http;
@@ -50,6 +51,26 @@ namespace MagicVilla_Web.Services
                 HttpResponseMessage _response = null;
                 _response = await client.SendAsync(message);
                 var apicontent =await _response.Content.ReadAsStringAsync();
+                try 
+                {
+                    APIResponse respon = JsonConvert.DeserializeObject<APIResponse>(apicontent);
+                    if (_response.StatusCode == System.Net.HttpStatusCode.BadRequest 
+                        || _response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        respon.Status = System.Net.HttpStatusCode.BadRequest;
+                        respon.IsSuccess = false;
+                        var res = JsonConvert.SerializeObject(respon);
+                        var returnObj = JsonConvert.DeserializeObject<T>(res);
+                        return returnObj;
+                        
+                    }
+
+                }
+                catch (Exception e)
+                { 
+                    var excep = JsonConvert.DeserializeObject<T>(apicontent);
+                    return excep;
+                }
                 var APIResponse = JsonConvert.DeserializeObject<T>(apicontent);
                 return APIResponse;
             }

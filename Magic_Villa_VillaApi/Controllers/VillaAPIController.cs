@@ -72,7 +72,7 @@ namespace Magic_Villa_VillaApi.Controllers
         public async Task<ActionResult <APIResponse>> CreateVilla([FromBody]VillaCreatedDto createdvilla) { 
             if (await db_villa.GetAsync(u=>u.Name.ToLower() == createdvilla.Name.ToLower()) != null)
             {
-                ModelState.AddModelError("CustomError", "This Villa Already Exist!");
+                ModelState.AddModelError("ErrorMessages", "This Villa Already Exist!");
                 return BadRequest(ModelState);
             }
             if (createdvilla == null)

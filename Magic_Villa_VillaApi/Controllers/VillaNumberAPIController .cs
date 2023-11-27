@@ -74,7 +74,7 @@ namespace Magic_Villa_VillaApi.Controllers
         public async Task<ActionResult <APIResponse>> CreateVillaNumber([FromBody]VillaNumberCreatedDto createdvilla) {
             if (await villaNumber.GetAsync(u => u.VillaNo == createdvilla.VillaNo) != null)
             {
-                ModelState.AddModelError("CustomError", "This Villa Already Exist!");
+                ModelState.AddModelError("ErrorMessages", "This Villa Already Exist!");
                 return BadRequest(ModelState);
             }
             if (createdvilla == null)
@@ -83,7 +83,7 @@ namespace Magic_Villa_VillaApi.Controllers
             }
             if (await _dbvilla.GetAsync(u=>u.Id == createdvilla.VillaID) == null)
             {
-                ModelState.AddModelError("CustomError", "Villa ID is Invalid!");
+                ModelState.AddModelError("ErrorMessages", "Villa ID is Invalid!");
                 return BadRequest(ModelState);
             }
             VillaNumber model = _mapper.Map<VillaNumber>(createdvilla);
@@ -136,7 +136,7 @@ namespace Magic_Villa_VillaApi.Controllers
             }
             if (await _dbvilla.GetAsync(u => u.Id == updateddto.VillaID) == null)
             {
-                ModelState.AddModelError("CustomError", "Villa ID is Invalid!");
+                ModelState.AddModelError("ErrorMessages", "Villa ID is Invalid!");
                 return BadRequest(ModelState);
             }
             VillaNumber model = _mapper.Map<VillaNumber>(updateddto);
