@@ -4,6 +4,7 @@ using Magic_Villa_VillaApi.Logging;
 using Magic_Villa_VillaApi.Models;
 using Magic_Villa_VillaApi.Models.DTO;
 using Magic_Villa_VillaApi.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +30,10 @@ namespace Magic_Villa_VillaApi.Controllers
 
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+
         public async Task<ActionResult <APIResponse>> GetVillas() {
             IEnumerable <Villa> villalist = await db_villa.GetAllAsync();
             _logger.Log("Get All Villas!","");
@@ -40,8 +44,10 @@ namespace Magic_Villa_VillaApi.Controllers
 
         
         [HttpGet("{id:int}",Name ="GetVilla")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         public async Task<ActionResult<APIResponse>> GetSpaceficVilla(int id)
         {
@@ -66,6 +72,7 @@ namespace Magic_Villa_VillaApi.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -89,6 +96,7 @@ namespace Magic_Villa_VillaApi.Controllers
 
 
         [HttpDelete("{id:int}",Name = "DeleteVilla")]
+        [Authorize(Roles = "CUSTOM")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

@@ -37,10 +37,10 @@ namespace Magic_Villa_VillaApi.Repository
             return await query.ToListAsync();
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>>? Fillter = null, bool tracking = true, string? includeProperties = null)
+        public async Task<T> GetAsync(Expression<Func<T, bool>>? Fillter = null, bool tracked = true, string? includeProperties = null)
         {
             IQueryable<T> query = dbset;
-            if (!tracking)
+            if (!tracked)
             {
                 query = query.AsNoTracking();
             }

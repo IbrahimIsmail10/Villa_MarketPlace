@@ -6,9 +6,11 @@ namespace Magic_Villa_VillaApi.Data
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
+       
+        public DbSet<Users> LocalUsers { get; set; }
         public DbSet<Villa> villas { get; set; }
         public DbSet<VillaNumber> villasNo { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
