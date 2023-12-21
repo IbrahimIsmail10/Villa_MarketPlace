@@ -29,11 +29,10 @@ namespace Magic_Villa_VillaApi.Controllers
         }
 
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
-        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-
         public async Task<ActionResult <APIResponse>> GetVillas() {
             IEnumerable <Villa> villalist = await db_villa.GetAllAsync();
             _logger.Log("Get All Villas!","");
@@ -96,7 +95,7 @@ namespace Magic_Villa_VillaApi.Controllers
 
 
         [HttpDelete("{id:int}",Name = "DeleteVilla")]
-        [Authorize(Roles = "CUSTOM")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -122,7 +121,7 @@ namespace Magic_Villa_VillaApi.Controllers
             
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpPut("{id:int}", Name = "UpdateVilla")]
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
@@ -142,6 +141,7 @@ namespace Magic_Villa_VillaApi.Controllers
 
 
         [HttpPatch("{id:int}")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]

@@ -4,6 +4,7 @@ using Magic_Villa_VillaApi.Logging;
 using Magic_Villa_VillaApi.Models;
 using Magic_Villa_VillaApi.Models.DTO;
 using Magic_Villa_VillaApi.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,7 @@ namespace Magic_Villa_VillaApi.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(200)]
         public async Task<ActionResult <APIResponse>> GetVillasNumber() {
             IEnumerable <VillaNumber> villalist = await villaNumber.GetAllAsync(includeProperties:"Villa");
@@ -42,6 +44,7 @@ namespace Magic_Villa_VillaApi.Controllers
 
         
         [HttpGet("{id:int}",Name = "GetVillaNumber")]
+
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -68,6 +71,8 @@ namespace Magic_Villa_VillaApi.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
+
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -97,6 +102,8 @@ namespace Magic_Villa_VillaApi.Controllers
 
 
         [HttpDelete("{id:int}",Name = "DeleteVillaNumber")]
+        [Authorize(Roles = "admin")]
+
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -124,6 +131,8 @@ namespace Magic_Villa_VillaApi.Controllers
 
 
         [HttpPut("{id:int}", Name = "UpdateVillaNumber")]
+        [Authorize(Roles = "admin")]
+
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -147,6 +156,8 @@ namespace Magic_Villa_VillaApi.Controllers
         }
 
 
+
+        [Authorize(Roles = "admin")]
 
         [HttpPatch("{id:int}")]
         [ProducesResponseType(200)]

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Newtonsoft.Json;
 using System.Linq.Expressions;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Serialization;
 using Utility;
@@ -49,6 +50,10 @@ namespace MagicVilla_Web.Services
                         break;
                 }
                 HttpResponseMessage _response = null;
+                if (!string.IsNullOrEmpty(ApiRequest.Token))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",ApiRequest.Token);
+                }
                 _response = await client.SendAsync(message);
                 var apicontent =await _response.Content.ReadAsStringAsync();
                 try 
@@ -66,7 +71,7 @@ namespace MagicVilla_Web.Services
                     }
 
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 { 
                     var excep = JsonConvert.DeserializeObject<T>(apicontent);
                     return excep;

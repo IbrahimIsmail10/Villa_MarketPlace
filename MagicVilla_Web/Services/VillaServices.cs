@@ -15,50 +15,55 @@ namespace MagicVilla_Web.Services
             villaUrl = configuration.GetValue<string>("ServicesUrls:VillaAPI");
         }
 
-        public Task<T> CreateAsync<T>(VillaCreatedDto entity)
+        public Task<T> CreateAsync<T>(VillaCreatedDto entity, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.APITYPE.POST,
                 Url = villaUrl + "/api/VillaAPI",
-                Data = entity
+                Data = entity,
+                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.APITYPE.GET,
-                Url = villaUrl + "/api/VillaAPI"
+                Url = villaUrl + "/api/VillaAPI",
+                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.APITYPE.GET,
-                Url = villaUrl + "/api/VillaAPI/" + id
+                Url = villaUrl + "/api/VillaAPI/" + id,
+                Token = token
             });
         }
 
-        public Task<T> RemoveAsync<T>(int id)
+        public Task<T> RemoveAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.APITYPE.DELETE,
-                Url = villaUrl + "/api/VillaAPI/" + id
+                Url = villaUrl + "/api/VillaAPI/" + id,
+                Token = token
             });
         }
 
-        public Task<T> UpdateAsync<T>(VillaUpdatedDto entity)
+        public Task<T> UpdateAsync<T>(VillaUpdatedDto entity, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.APITYPE.PUT,
                 Url = villaUrl + "/api/VillaAPI/" + entity.Id,
-                Data = entity
+                Data = entity,
+                Token = token
             });
         }
     }

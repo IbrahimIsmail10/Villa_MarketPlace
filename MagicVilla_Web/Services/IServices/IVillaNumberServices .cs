@@ -5,14 +5,14 @@ namespace MagicVilla_Web.Services.IServices
 {
     public interface IVillaNumberServices
     {
-        Task<T> GetAllAsync<T>();
+        Task<T> GetAllAsync<T>(string token);
 
-        Task<T> GetAsync<T>(int id);
+        Task<T> GetAsync<T>(int id, string token);
         
-        Task<T> CreateAsync<T>(VillaNumberCreatedDto entity);
+        Task<T> CreateAsync<T>(VillaNumberCreatedDto entity, string token);
         
-        Task<T> UpdateAsync<T>(VillaNumberUpdatedDto entity);
+        Task<T> UpdateAsync<T>(VillaNumberUpdatedDto entity, string token);
         
-        Task<T> RemoveAsync<T>(int id);
+        Task<T> RemoveAsync<T>(int id, string token);
     }
 }
