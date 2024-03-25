@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Text.Json;
 
 namespace Magic_Villa_VillaApi.Controllers
 {
@@ -29,12 +30,30 @@ namespace Magic_Villa_VillaApi.Controllers
         }
 
 
-        [Authorize(Roles = "admin")]
+       // [Authorize(Roles = "admin")]
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        public async Task<ActionResult <APIResponse>> GetVillas() {
-            IEnumerable <Villa> villalist = await db_villa.GetAllAsync();
+        [ResponseCache(Duration = 30)]
+        public async Task<ActionResult <APIResponse>> GetVillas([FromQuery(Name ="Occupency Filter")] int? occupency,
+            [FromQuery(Name = "Search")] string? search,int pagesize = 0,int pagenumber = 1)
+        {
+            IEnumerable<Villa> villalist; 
+            if (occupency > 0)
+            {
+                villalist = await db_villa.GetAllAsync(u => u.Occupency == occupency, pagesize : pagesize,pagenumber:pagenumber);
+            }
+            else
+            {
+                villalist = await db_villa.GetAllAsync();
+            }
+            if (search != null)
+            {
+                villalist = villalist.Where(u => u.Name.ToLower().Contains(search.ToLower()));
+            }
+            //adding pagination to the header of response 
+            Pagination pag = new Pagination() { PageSize =pagesize,PageNumber = pagenumber};
+            Response.Headers.Add("X_Pagination", JsonSerializer.Serialize(pag));
             _logger.Log("Get All Villas!","");
             response.Result = _mapper.Map<List<VillaDto>>(villalist);
             response.Status = HttpStatusCode.OK;
@@ -48,6 +67,7 @@ namespace Magic_Villa_VillaApi.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
+        [ResponseCache(CacheProfileName = "Default30")]
         public async Task<ActionResult<APIResponse>> GetSpaceficVilla(int id)
         {
             if(id == 0) {

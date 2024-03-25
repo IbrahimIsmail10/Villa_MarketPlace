@@ -20,12 +20,21 @@ namespace Magic_Villa_VillaApi.Repository
             await SaveAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? Fillter = null, string? includeProperties = null)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? Fillter = null, string? includeProperties = null,
+            int pagesize = 0, int pagenumber = 1)
         {
             IQueryable<T> query = dbset;
             if (Fillter != null)
             {
                 query = query.Where(Fillter);
+            }
+            if (pagesize > 0)
+            {
+                if (pagesize > 100)
+                {
+                    pagesize = 100;
+                }
+                query = query.Skip(pagesize * (pagenumber - 1)).Take(pagesize);
             }
             if (includeProperties != null)
             {
@@ -64,7 +73,7 @@ namespace Magic_Villa_VillaApi.Repository
         {
             dbset.Remove(entity);
             await SaveAsync();
-        }
+        }   
 
         public async Task SaveAsync()
         {

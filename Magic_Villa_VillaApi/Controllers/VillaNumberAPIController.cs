@@ -14,6 +14,7 @@ namespace Magic_Villa_VillaApi.Controllers
 {
     [Route("api/VillaNumberAPI")]
     [ApiController]
+
     public class VillaNumberAPIController : ControllerBase
     {
         protected APIResponse response;
@@ -32,7 +33,6 @@ namespace Magic_Villa_VillaApi.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "admin")]
         [ProducesResponseType(200)]
         public async Task<ActionResult <APIResponse>> GetVillasNumber() {
             IEnumerable <VillaNumber> villalist = await villaNumber.GetAllAsync(includeProperties:"Villa");
@@ -42,11 +42,11 @@ namespace Magic_Villa_VillaApi.Controllers
             return Ok(response);
         }
 
-        
         [HttpGet("{id:int}",Name = "GetVillaNumber")]
-
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         public async Task<ActionResult<APIResponse>> GetVillaNumber(int id)
         {
