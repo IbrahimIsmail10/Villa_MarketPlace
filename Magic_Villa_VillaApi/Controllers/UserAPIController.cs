@@ -27,7 +27,7 @@ namespace Magic_Villa_VillaApi.Controllers
         public async Task<ActionResult> Login([FromBody] LoginRequestDto login)
         {
             var log = await db_users.Login(login);
-            if (log.user == null)
+            if (log.User == null)
             {
                 response.IsSuccess = false;
                 response.Status = HttpStatusCode.NotFound;
@@ -70,7 +70,6 @@ namespace Magic_Villa_VillaApi.Controllers
             }
             response.IsSuccess = true;
             response.Status = HttpStatusCode.OK;
-            response.Result = user;
             return Ok(response);
         }
 

@@ -1,12 +1,15 @@
 ﻿using Magic_Villa_VillaApi.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Magic_Villa_VillaApi.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-       
+
+
+        public DbSet<ApplicationUser> AppUser { get; set; }
         public DbSet<Users> LocalUsers { get; set; }
         public DbSet<Villa> villas { get; set; }
         public DbSet<VillaNumber> villasNo { get; set; }
@@ -14,6 +17,7 @@ namespace Magic_Villa_VillaApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Villa>().HasData(new Villa
             {
                 Id = 1,
@@ -24,7 +28,7 @@ namespace Magic_Villa_VillaApi.Data
                 Rate = 200,
                 Sqfit = 550,
                 Amenity = "",
-                CreatedDate = DateTime.Now
+                CreatedDate = new DateTime(2000,01,01)
             },
               new Villa
               {
@@ -36,7 +40,8 @@ namespace Magic_Villa_VillaApi.Data
                   Rate = 300,
                   Sqfit = 550,
                   Amenity = "",
-                  CreatedDate = DateTime.Now
+                  CreatedDate = new DateTime(2000, 01, 01)
+
 
               },
               new Villa
@@ -49,7 +54,8 @@ namespace Magic_Villa_VillaApi.Data
                   Rate = 400,
                   Sqfit = 750,
                   Amenity = "",
-                  CreatedDate = DateTime.Now
+                  CreatedDate = new DateTime(2000, 01, 01)
+
 
               },
               new Villa
@@ -62,7 +68,8 @@ namespace Magic_Villa_VillaApi.Data
                   Rate = 550,
                   Sqfit = 900,
                   Amenity = "",
-                  CreatedDate = DateTime.Now
+                  CreatedDate = new DateTime(2000, 01, 01)
+
 
               },
               new Villa
@@ -75,7 +82,8 @@ namespace Magic_Villa_VillaApi.Data
                   Rate = 600,
                   Sqfit = 1100,
                   Amenity = "",
-                  CreatedDate = DateTime.Now
+                  CreatedDate = new DateTime(2000, 01, 01)
+
 
               });
             modelBuilder.Entity<VillaNumber>().HasData(
@@ -83,21 +91,24 @@ namespace Magic_Villa_VillaApi.Data
                 {
                     VillaNo = 101,
                     SpecialDetails = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                    CreatedDate = DateTime.Now
+                    CreatedDate = new DateTime(2000, 01, 01)
+
 
                 },
               new VillaNumber
               {
                   VillaNo = 99,
                   SpecialDetails = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                  CreatedDate = DateTime.Now
+                  CreatedDate = new DateTime(2000, 01, 01)
+
 
               },
               new VillaNumber
               {
                   VillaNo = 105,
                   SpecialDetails = "Fusce 11 tincidunt maximus leo, sed scelerisque massa auctor sit amet. Donec ex mauris, hendrerit quis nibh ac, efficitur fringilla enim.",
-                  CreatedDate = DateTime.Now
+                  CreatedDate = new DateTime(2000, 01, 01)
+
               });
         }
     }
