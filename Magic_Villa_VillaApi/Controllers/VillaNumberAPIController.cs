@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
-namespace Magic_Villa_VillaApi.Controllers.v1
+namespace Magic_Villa_VillaApi.Controllers
 {
-    [Route("api/v{version:apiVersion}/VillaNumberAPI")]
+    [Route("api/VillaNumberAPI")]
     [ApiController]
     [ApiVersion("1.0")]
 

@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Text.Json;
 
-namespace Magic_Villa_VillaApi.Controllers.v1
+namespace Magic_Villa_VillaApi.Controllers
 {
-    [Route("api/v{version:apiVersion}/VillaAPI")]
+    [Route("api/VillaAPI")]
     [ApiController]
     [ApiVersion("1.0")]
     public class VillaAPIController : ControllerBase

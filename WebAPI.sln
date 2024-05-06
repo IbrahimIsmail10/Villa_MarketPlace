@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magic_Villa_VillaApi", "Mag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicVilla_Web", "MagicVilla_Web\MagicVilla_Web.csproj", "{5B5F4D54-4FCF-402D-B509-E8ED3255CFDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{5DF8E02A-BBA5-4297-85E7-D9ECEAB49933}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.csproj", "{5DF8E02A-BBA5-4297-85E7-D9ECEAB49933}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
