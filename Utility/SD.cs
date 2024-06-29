@@ -1,4 +1,5 @@
-﻿namespace Utility
+﻿
+namespace Utility
 {
     public class SD
     {
@@ -10,5 +11,13 @@
             DELETE
         }
         public static string SessionToken = "JWTToken";
+        public const string Admin = "admin";
+        public const string Customer = "customer";
+
+        public enum ContenType {
+            Json,
+            MultipartFormData,
+        }
+
     }
 }

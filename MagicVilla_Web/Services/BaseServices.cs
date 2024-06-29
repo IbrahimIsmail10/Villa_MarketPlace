@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Serialization;
 using Utility;
+using static Utility.SD;
 
 namespace MagicVilla_Web.Services
 {
@@ -28,12 +29,46 @@ namespace MagicVilla_Web.Services
             {
                 var client = HttpClient.CreateClient("MagicAPI");
                 HttpRequestMessage message = new HttpRequestMessage();
-                message.Headers.Add("Accept", "application/json");
-                message.RequestUri = new Uri(ApiRequest.Url);
-                if (ApiRequest.Data != null)
+                if (ApiRequest.ContenType == ContenType.MultipartFormData)
                 {
-                    message.Content = new StringContent(JsonConvert.SerializeObject(ApiRequest.Data)
-                                       ,Encoding.UTF8, "application/json");
+                     message.Headers.Add("Accept", "*/*");
+                        
+                }
+                else
+                {
+                     message.Headers.Add("Accept", "application/json");
+                    
+                }
+                message.RequestUri = new Uri(ApiRequest.Url);
+                if (ApiRequest.ContenType == ContenType.MultipartFormData)
+                {
+                    var content = new MultipartFormDataContent();
+
+                    foreach (var prop in ApiRequest.Data.GetType().GetProperties())
+                    {
+                        var value = prop.GetValue(ApiRequest.Data);
+                        if (value is FormFile)
+                        {
+                            var file = (FormFile)value;
+                            if (file != null)
+                            {
+                                content.Add(new StreamContent(file.OpenReadStream()), prop.Name, file.FileName);
+                            }
+                        }
+                        else
+                        {
+                            content.Add(new StringContent(value == null ? "" : value.ToString()), prop.Name);
+                        }
+                    }
+                    message.Content = content;
+                }
+                else
+                {
+                    if (ApiRequest.Data != null)
+                    {
+                        message.Content = new StringContent(JsonConvert.SerializeObject(ApiRequest.Data)
+                                           , Encoding.UTF8, "application/json");
+                    } 
                 }
                 switch (ApiRequest.ApiType) {
                     case SD.APITYPE.POST:

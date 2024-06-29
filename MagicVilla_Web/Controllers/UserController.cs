@@ -4,6 +4,7 @@ using MagicVilla_Web.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -56,6 +57,12 @@ namespace MagicVilla_Web.Controllers
 
         public IActionResult Register()
         {
+            var roleList = new List<SelectListItem>()
+            {
+                new SelectListItem{Text = SD.Admin , Value=SD.Admin},
+                new SelectListItem{Text = SD.Customer , Value=SD.Customer}
+            };
+            ViewBag.RoleList = roleList;    
             RegistrationRequestDto obj = new();
             return View(obj);
         }
@@ -64,11 +71,21 @@ namespace MagicVilla_Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegistrationRequestDto obj)
         {
+            if (string.IsNullOrEmpty(obj.Role))
+            {
+                obj.Role = SD.Customer;
+            }
             APIResponse res = await _authServices.RegisterAsync<APIResponse>(obj);
             if (res != null && res.IsSuccess)
             {
                 return RedirectToAction("Login");
             }
+            var roleList = new List<SelectListItem>()
+            {
+                new SelectListItem{Text = SD.Admin , Value=SD.Admin},
+                new SelectListItem{Text = SD.Customer , Value=SD.Customer}
+            };
+            ViewBag.RoleList = roleList;
             return View();
         }
 

@@ -35,7 +35,6 @@ namespace Magic_Villa_VillaApi.Controllers
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
-        [ResponseCache(Duration = 30)]
         public async Task<ActionResult<APIResponse>> GetVillas([FromQuery(Name = "Occupency Filter")] int? occupency,
             [FromQuery(Name = "Search")] string search, int pagesize = 0, int pagenumber = 1)
         {
@@ -68,7 +67,6 @@ namespace Magic_Villa_VillaApi.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
-        [ResponseCache(CacheProfileName = "Default30")]
         public async Task<ActionResult<APIResponse>> GetSpaceficVilla(int id)
         {
             if (id == 0)
@@ -98,8 +96,8 @@ namespace Magic_Villa_VillaApi.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaCreatedDto createdvilla)
-        {
+        public async Task<ActionResult<APIResponse>> CreateVilla([FromForm] VillaCreatedDto createdvilla)
+        { 
             if (await db_villa.GetAsync(u => u.Name.ToLower() == createdvilla.Name.ToLower()) != null)
             {
                 ModelState.AddModelError("ErrorMessages", "This Villa Already Exist!");
@@ -111,6 +109,30 @@ namespace Magic_Villa_VillaApi.Controllers
             }
             Villa model = _mapper.Map<Villa>(createdvilla);
             await db_villa.CreateAsync(model);
+
+            if (createdvilla.Image != null)
+            {
+                string fileName = model.Id + Path.GetExtension(createdvilla.Image.FileName);
+                string filePath = @"wwwroot\ProductImage\" + fileName;
+
+                var directoryLoc = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                FileInfo file = new FileInfo(directoryLoc);
+                if (file.Exists) { 
+                    file.Delete();
+                }
+                using (var fileStream = new FileStream(directoryLoc, FileMode.Create))
+                {
+                    createdvilla.Image.CopyTo(fileStream);
+                }
+                var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                model.ImageUrl = baseUrl + "/ProductImage/" + fileName;
+                model.ImageLocalPath = filePath;
+            }
+            else
+            {
+                model.ImageUrl = "http://placehold.co/600x400";
+            }
+            await db_villa.UpdateAsync(model);
             response.Result = model;
             response.Status = HttpStatusCode.OK;
             return Ok(response);
@@ -132,12 +154,22 @@ namespace Magic_Villa_VillaApi.Controllers
                 return BadRequest(response);
             }
             var villa = await db_villa.GetAsync(u => u.Id == id);
+
             if (villa == null)
             {
                 response.Status = HttpStatusCode.NotFound;
                 response.IsSuccess = false;
                 return NotFound(response);
 
+            }
+            if (!string.IsNullOrEmpty(villa.ImageLocalPath))
+            {
+                var oldFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), villa.ImageLocalPath);
+                FileInfo file = new FileInfo(oldFileDirectory);
+                if (file.Exists)
+                {
+                    file.Delete();
+                }
             }
             await db_villa.RemoveAsync(villa);
             response.Status = HttpStatusCode.NoContent;
@@ -151,13 +183,40 @@ namespace Magic_Villa_VillaApi.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<Villa>> UpdateVilla(int id, [FromBody] VillaUpdatedDto updateddto)
-        {
+        public async Task<ActionResult<Villa>> UpdateVilla(int id, [FromForm] VillaUpdatedDto updateddto)
+        { 
             if (id != updateddto.Id || updateddto == null)
             {
                 return BadRequest();
             }
             Villa model = _mapper.Map<Villa>(updateddto);
+            if (updateddto.Image != null)
+            {
+                if (!string.IsNullOrEmpty(model.ImageLocalPath))
+                {
+                    var oldFileDirectory = Path.Combine(Directory.GetCurrentDirectory(),model.ImageLocalPath);
+                    FileInfo file = new FileInfo(oldFileDirectory);
+                    if (file.Exists)
+                    {
+                        file.Delete();
+                    }
+                }
+                string fileName = updateddto.Id + Path.GetExtension(updateddto.Image.FileName);
+                string filePath = @"wwwroot\ProductImage\" + fileName;
+                var directoryLoc = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+               
+                using (var fileStream = new FileStream(directoryLoc, FileMode.Create))
+                {
+                    updateddto.Image.CopyTo(fileStream);
+                }
+                var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                model.ImageUrl = baseUrl + "/ProductImage/" + fileName;
+                model.ImageLocalPath = filePath;
+            }
+            else
+            {
+                model.ImageUrl = "http://placehold.co/600x400";
+            }
             var villa = await db_villa.UpdateAsync(model);
             return Ok(villa);
         }
@@ -183,16 +242,6 @@ namespace Magic_Villa_VillaApi.Controllers
             }
             // _mapper.map<Destenation>(source).
             VillaUpdatedDto villaDto = _mapper.Map<VillaUpdatedDto>(villa);
-            //VillaUpdatedDto villaDto = new VillaUpdatedDto() {
-            //     Id = villa.Id,
-            //     Name = villa.Name,
-            //     Occupency = villa.Occupency,
-            //     Details = villa.Details,
-            //     Rate = villa.Rate,
-            //     Amenity = villa.Amenity,
-            //     ImageUrl = villa.ImageUrl,
-            //     sqfit = villa.Sqfit
-            // };
             dto.ApplyTo(villaDto, ModelState);
             Villa model = _mapper.Map<Villa>(villaDto);
             if (!ModelState.IsValid)

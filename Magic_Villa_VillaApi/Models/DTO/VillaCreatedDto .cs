@@ -15,6 +15,7 @@ namespace Magic_Villa_VillaApi.Models.DTO
         [Required]
         public int sqfit { get; set; }
         public string ImageUrl { get; set; }
+        public IFormFile? Image { get; set; }
         public string Amenity { get; set; }
     }
 }

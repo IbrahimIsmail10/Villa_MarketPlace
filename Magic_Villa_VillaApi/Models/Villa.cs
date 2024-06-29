@@ -13,7 +13,9 @@ namespace Magic_Villa_VillaApi.Models
         public double Rate { get; set; }
         public int Occupency { get; set; }
         public int Sqfit { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? ImageLocalPath { get; set; }
+
         public string Amenity { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }

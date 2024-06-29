@@ -22,7 +22,8 @@ namespace MagicVilla_Web.Services
                 ApiType = SD.APITYPE.POST,
                 Url = villaUrl + "/api/VillaAPI",
                 Data = entity,
-                Token = token
+                Token = token,
+                ContenType = SD.ContenType.MultipartFormData
             });
         }
 
@@ -63,7 +64,8 @@ namespace MagicVilla_Web.Services
                 ApiType = SD.APITYPE.PUT,
                 Url = villaUrl + "/api/VillaAPI/" + entity.Id,
                 Data = entity,
-                Token = token
+                Token = token,
+                ContenType = SD.ContenType.MultipartFormData
             });
         }
     }

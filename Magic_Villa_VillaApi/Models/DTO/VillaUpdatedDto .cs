@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿ using System.ComponentModel.DataAnnotations;
 
 namespace Magic_Villa_VillaApi.Models.DTO
 {
@@ -18,9 +18,11 @@ namespace Magic_Villa_VillaApi.Models.DTO
         [Required]
 
         public int sqfit { get; set; }
-        [Required]
 
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; } 
+        public string? ImageLocalPath { get; set; }
+        public IFormFile? Image { get; set; }
+
         public string Amenity { get; set; }
     }
 }
